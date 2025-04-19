@@ -1,522 +1,281 @@
-import React, { useState, useEffect } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import BrightSparksLogo from '../images/BrightSparksLogo.png';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import heroImage from '../images/BrightSparksLogo.png'; // replace with actual hero image path
 
-const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-  * {
-    box-sizing: border-box;
-  }
-  html {
-    scroll-behavior: smooth;
-  }
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #fff;
-    color: #000;
-    line-height: 1.6;
-  }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  *:focus {
-    outline: none;
-  }
-  *:focus-visible {
-    outline: 2px dashed #000;
-    outline-offset: 3px;
-  }
-  .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  }
-  .reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-  }
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
-const Header = styled.header`
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
+const Landing = () => (
+  <PageWrapper>
+    {/* Hero Section */}
+    <HeroSection>
+      <Overlay />
+      <HeroContent>
+        <Headline>Free. Personalized. Flexible Tutoring That Transforms Futures.</Headline>
+        <Subheadline>
+          Bright Sparks Academy offers free 1-on-1 tutoring tailored to every child’s needs—right from the comfort of your home.
+        </Subheadline>
+        <ButtonGroup>
+          <PrimaryButton to="/join">Get Started Today</PrimaryButton>
+          <SecondaryLink to="/origin">Learn More About Us</SecondaryLink>
+        </ButtonGroup>
+      </HeroContent>
+    </HeroSection>
 
-const HeaderContent = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-`;
+    {/* Impact & Mission */}
+    <ImpactSection>
+      {[
+        { metric: '3+ Years of Free Tutoring', caption: '' },
+        { metric: '50+ Tutors Trained', caption: '' },
+        { metric: '20+ Current Students Served', caption: '' },
+        { metric: '100% Personalized Learning Paths', caption: '' },
+      ].map((item, i) => (
+        <ImpactCard key={i} style={{ animationDelay: `${i * 0.2}s` }}>
+          <Metric>{item.metric}</Metric>
+          <Caption>{item.caption}</Caption>
+        </ImpactCard>
+      ))}
+      <MissionStatement>
+        We’re reimagining education by offering cutting-edge, customized tutoring to underserved children—free of charge, anytime, anywhere.
+      </MissionStatement>
+    </ImpactSection>
 
-const Logo = styled.img`
-  height: 50px;
-`;
+    {/* Testimonials */}
+    <TestimonialsSection>
+      <SectionTitle>Trusted by Families Across the Bay Area</SectionTitle>
+      <TestimonialGrid>
+        {[
+          { name: 'Sarah K.', grade: '5th Grade Student', quote: 'Bright Sparks has transformed my daughter’s confidence in math!' },
+          { name: 'Michael T.', grade: '8th Grade Student', quote: 'Tutors are professional and truly care about progress.' },
+          { name: 'Emily R.', grade: '6th Grade Student', quote: 'Flexible scheduling made it so easy for our busy family.' },
+        ].map((t, i) => (
+          <TestimonialCard key={i}>
+            <Quote>"{t.quote}"</Quote>
+            <Author>{t.name} – {t.grade}</Author>
+          </TestimonialCard>
+        ))}
+      </TestimonialGrid>
+      <SubmitLink to="/contact">Submit Your Testimonial</SubmitLink>
+    </TestimonialsSection>
 
-const MenuToggle = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
+    {/* How It Works */}
+    <ProcessSection>
+      <SectionTitle>How Bright Sparks Works</SectionTitle>
+      <StepsWrapper>
+        <Step>
+          <StepNumber>1</StepNumber>
+          <StepTitle>Sign Up & Tell Us Your Needs</StepTitle>
+          <StepDesc>Fill out a brief form with student info, schedule, and preferences.</StepDesc>
+        </Step>
+        <Step>
+          <StepNumber>2</StepNumber>
+          <StepTitle>Get Matched with a Tutor</StepTitle>
+          <StepDesc>Based on subject, style, and availability.</StepDesc>
+        </Step>
+        <Step>
+          <StepNumber>3</StepNumber>
+          <StepTitle>Start Learning & See Progress</StepTitle>
+          <StepDesc>Weekly sessions, flexible hours, regular parent updates.</StepDesc>
+        </Step>
+      </StepsWrapper>
+    </ProcessSection>
+
+    {/* Final CTA */}
+    <CTASection>
+      <CTATitle>Ready to Spark Your Child’s Learning Journey?</CTATitle>
+      <CTASubtext>Join dozens of families already experiencing the power of personalized education—100% free.</CTASubtext>
+      <PrimaryButton to="/join">Enroll for Free</PrimaryButton>
+    </CTASection>
+  </PageWrapper>
+);
+
+export default Landing;
+
+// Styled Components
+
+const PageWrapper = styled.div`
+  font-family: 'Inter', sans-serif;
   color: #000;
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const NavLinks = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  li:not(:first-child) {
-    margin-left: 2rem;
-  }
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    background: #fff;
-    padding: 1rem 1.5rem;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    /* Show or hide the menu based on prop 'open' */
-    display: ${props => (props.open ? 'flex' : 'none')};
-    li {
-      margin: 0.5rem 0;
-    }
-  }
-`;
-
-const NavLink = styled.a`
-  font-size: 1rem;
-  font-weight: 500;
-  color: #000;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: background 0.3s;
-  &:hover {
-    background: #FFD900;
-  }
-`;
-
-const NavButton = styled.a`
-  font-size: 1rem;
-  font-weight: 600;
-  background: #FFD900;
-  color: #000;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background 0.3s;
-  &:hover {
-    background: #F0C000;
-  }
-`;
-
-const Main = styled.main`
-  flex: 1;
 `;
 
 const HeroSection = styled.section`
-  padding: 6rem 0;
-  background: #FFD900;
-  color: #000;
-  text-align: center;
+  position: relative;
+  // background: url(${heroImage}) center/cover no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
 `;
 
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+const Overlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 217, 0, 0.15);
 `;
 
-const HeroTitle = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0;
-  @media (min-width: 768px) {
-    font-size: 3rem;
-  }
+const HeroContent = styled.div`
+  position: relative;
+  max-width: 600px;
+  margin-left: 5%;
+  animation: ${fadeInUp} 0.6s ease-out;
 `;
 
-const HeroSubtitle = styled.p`
+const Headline = styled.h1`
+  font-size: 3rem;
+  margin-bottom: 1rem;
+`;
+
+const Subheadline = styled.p`
   font-size: 1.25rem;
-  margin: 1rem 0 2rem;
+  margin-bottom: 2rem;
 `;
 
-const HeroButton = styled.a`
-  display: inline-block;
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PrimaryButton = styled(Link)`
   background: #000;
-  color: #FFD900;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-  border-radius: 4px;
-  transition: background 0.3s, color 0.3s;
+  color: #ffd900;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-right: 16px;
   &:hover {
-    background: #FFD900;
-    color: #000;
+    opacity: 0.8;
   }
 `;
 
-const Section = styled.section`
-  padding: 4rem 0;
+const SecondaryLink = styled(Link)`
+  color: #000;
+  text-decoration: underline;
+  font-size: 1rem;
+`;
+
+const ImpactSection = styled.section`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 4rem 2rem;
+`;
+
+const ImpactCard = styled.div`
+  text-align: center;
+  margin: 1rem;
+  animation: ${fadeInUp} 0.6s ease-out forwards;
+`;
+
+const Metric = styled.h3`
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+`;
+
+const Caption = styled.p`
+  font-size: 1rem;
+`;
+
+const MissionStatement = styled.p`
+  max-width: 800px;
+  margin: 2rem auto 0;
+  text-align: center;
+  font-style: italic;
+`;
+
+const TestimonialsSection = styled.section`
+  background: #f9f7f0;
+  padding: 4rem 2rem;
+  text-align: center;
 `;
 
 const SectionTitle = styled.h2`
   font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  margin: 0 0 1rem;
+  margin-bottom: 2rem;
 `;
 
-const SectionText = styled.p`
-  max-width: 600px;
-  margin: 0 auto 2rem;
-  text-align: center;
-`;
-
-const TwoColumn = styled.div`
+const TestimonialGrid = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  @media (min-width: 768px) {
-    flex-direction: row;
-    gap: 4rem;
-  }
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
-const Column = styled.div`
-  flex: 1;
-  text-align: left;
+const TestimonialCard = styled.div`
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 1rem;
+  max-width: 300px;
 `;
 
-const ColumnTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
-  display: inline-block;
-  border-bottom: 0.25rem solid #FFD900;
-  padding-bottom: 0.25rem;
-  margin: 0 0 1rem;
-`;
-
-const Form = styled.form`
-  max-width: 400px;
-  margin: 0 auto;
-`;
-
-const ContactFormStyled = styled(Form)`
-  max-width: 500px;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
+const Quote = styled.p`
+  font-size: 1rem;
   margin-bottom: 1rem;
 `;
 
-const Label = styled.label`
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+const Author = styled.p`
+  font-weight: bold;
+  font-size: 0.9rem;
 `;
 
-const Input = styled.input`
-  padding: 0.5rem;
-  border: 2px solid #000;
-  border-radius: 4px;
-  font: inherit;
-  &:focus {
-    border-color: #FFD900;
-  }
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: 0.5rem;
-  border: 2px solid #000;
-  border-radius: 4px;
-  font: inherit;
-  resize: vertical;
-  &:focus {
-    border-color: #FFD900;
-  }
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-  }
-`;
-
-const FormButton = styled.button`
-  background: #FFD900;
+const SubmitLink = styled(Link)`
+  display: inline-block;
+  margin-top: 1.5rem;
+  text-decoration: underline;
   color: #000;
-  font-weight: 600;
-  border: none;
-  border-radius: 4px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-  &:hover {
-    background: #F0C000;
-  }
 `;
 
-const Footer = styled.footer`
+const ProcessSection = styled.section`
+  padding: 4rem 2rem;
+`;
+
+const StepsWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+`;
+
+const Step = styled.div`
+  max-width: 250px;
   text-align: center;
-  padding: 2rem 1.5rem;
-  background: #fff;
-  color: #000;
+  margin: 1rem;
 `;
 
-function FrontPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [signUpData, setSignUpData] = useState({ name: '', email: '' });
-  const [contactData, setContactData] = useState({ name: '', email: '', message: '' });
+const StepNumber = styled.div`
+  background: #ffd900;
+  color: #000;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  margin: 0 auto 1rem;
+`;
 
-  const handleSignUpChange = (e) => {
-    const { name, value } = e.target;
-    setSignUpData(prev => ({ ...prev, [name]: value }));
-  };
+const StepTitle = styled.h3`
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+`;
 
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    // In a real app, you would send signUpData to the server here
-    alert(`Thank you for signing up, ${signUpData.name}!`);
-    setSignUpData({ name: '', email: '' });
-  };
+const StepDesc = styled.p`
+  font-size: 1rem;
+`;
 
-  const handleContactChange = (e) => {
-    const { name, value } = e.target;
-    setContactData(prev => ({ ...prev, [name]: value }));
-  };
+const CTASection = styled.section`
+  padding: 4rem 2rem;
+  text-align: center;
+`;
 
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    // In a real app, you would send contactData to the server here
-    alert('Thank you for contacting us! We will get back to you soon.');
-    setContactData({ name: '', email: '', message: '' });
-  };
+const CTATitle = styled.h2`
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+`;
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach(el => observer.observe(el));
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://tally.so/widgets/embed.js";
-    script.async = true;
-    script.onload = () => {
-      if (window.Tally) {
-        window.Tally.loadEmbeds(); // Ensure Tally is available before calling it
-      }
-    };
-    document.body.appendChild(script);
-  
-    return () => {
-      document.body.removeChild(script); // Cleanup script when component unmounts
-    };
-  }, []);
-
-  return (
-    <>
-      <GlobalStyle />
-      <Header>
-        <HeaderContent>
-          <a href="#home">
-            <Logo src={BrightSparksLogo} alt="Bright Sparks Academy Logo" />
-          </a>
-          <MenuToggle
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(prev => !prev)}
-          >
-            ☰
-          </MenuToggle>
-          <nav aria-label="Main Navigation">
-            <NavLinks open={menuOpen}>
-              <li><NavLink href="#about" onClick={() => setMenuOpen(false)}>About</NavLink></li>
-              <li><NavLink href="#contact" onClick={() => setMenuOpen(false)}>Contact</NavLink></li>
-              <li><NavButton href="#signup" onClick={() => setMenuOpen(false)}>Sign Up</NavButton></li>
-            </NavLinks>
-          </nav>
-        </HeaderContent>
-      </Header>
-      <Main>
-        <HeroSection id="home">
-          <Container>
-            <HeroTitle>Empowering Students. Inspiring Teachers.</HeroTitle>
-            <HeroSubtitle>
-              Bright Sparks Academy connects students with dedicated teachers 
-              to spark a love of learning.
-            </HeroSubtitle>
-            <HeroButton href="#signup">Get Started</HeroButton>
-          </Container>
-        </HeroSection>
-
-        <Section id="about" className="reveal">
-          <Container>
-            <SectionTitle>About Bright Sparks Academy</SectionTitle>
-            <SectionText>
-              Bright Sparks Academy is a modern educational platform that bridges students 
-              and teachers to foster a love of learning. Our mission is to make education 
-              engaging, accessible, and tailored to individual needs.
-            </SectionText>
-            <TwoColumn>
-              <Column>
-                <ColumnTitle>For Students</ColumnTitle>
-                <p>
-                  Personalized one-on-one lessons, engaging content, and a flexible 
-                  learning schedule help each student reach their full potential. 
-                  Bright Sparks Academy makes learning fun and effective, catering 
-                  to individual strengths and needs.
-                </p>
-              </Column>
-              <Column>
-                <ColumnTitle>For Teachers</ColumnTitle>
-                <p>
-                  Empowering educators with the freedom to design their own curriculum 
-                  and a platform to connect with eager learners. Teachers enjoy flexible 
-                  scheduling and the support of a passionate community dedicated to 
-                  innovative teaching.
-                </p>
-              </Column>
-            </TwoColumn>
-          </Container>
-        </Section>
-
-        {/* <Section id="signup" className="reveal">
-          <Container>
-            <SectionTitle>Sign Up</SectionTitle>
-            <SectionText>
-              Join Bright Sparks Academy today. Fill in your details below to get started 
-              on your personalized learning journey!
-            </SectionText>
-            <Form onSubmit={handleSignUpSubmit}>
-              <FormGroup>
-                <Label htmlFor="signup-name">Name</Label>
-                <Input
-                  id="signup-name"
-                  name="name"
-                  type="text"
-                  value={signUpData.name}
-                  onChange={handleSignUpChange}
-                  required
-                  placeholder="Your Name"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="signup-email">Email</Label>
-                <Input
-                  id="signup-email"
-                  name="email"
-                  type="email"
-                  value={signUpData.email}
-                  onChange={handleSignUpChange}
-                  required
-                  placeholder="Your Email"
-                />
-              </FormGroup>
-              <FormButton type="submit">Sign Up</FormButton>
-            </Form>
-          </Container>
-        </Section> */}
-
-        <Section id="student-application">
-        <Container>
-          <SectionTitle>Student Application Form</SectionTitle>
-          <iframe
-            data-tally-src="https://tally.so/embed/mO4r8A?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-            loading="lazy"
-            width="100%"
-            height="540"
-            frameBorder="0"
-            marginHeight="0"
-            marginWidth="0"
-            title="Student Application Form"
-          ></iframe>
-        </Container>
-      </Section>
-
-        <Section id="contact" className="reveal">
-          <Container>
-            <SectionTitle>Contact Us</SectionTitle>
-            <SectionText>
-              Have any questions or just want to say hello? Send us a message and we’ll 
-              get back to you as soon as possible.
-            </SectionText>
-            <ContactFormStyled onSubmit={handleContactSubmit}>
-              <FormGroup>
-                <Label htmlFor="contact-name">Name</Label>
-                <Input
-                  id="contact-name"
-                  name="name"
-                  type="text"
-                  value={contactData.name}
-                  onChange={handleContactChange}
-                  required
-                  placeholder="Your Name"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="contact-email">Email</Label>
-                <Input
-                  id="contact-email"
-                  name="email"
-                  type="email"
-                  value={contactData.email}
-                  onChange={handleContactChange}
-                  required
-                  placeholder="Your Email"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="contact-message">Message</Label>
-                <TextArea
-                  id="contact-message"
-                  name="message"
-                  rows="4"
-                  value={contactData.message}
-                  onChange={handleContactChange}
-                  required
-                  placeholder="Your Message"
-                />
-              </FormGroup>
-              <FormButton type="submit">Send Message</FormButton>
-            </ContactFormStyled>
-          </Container>
-        </Section>
-      </Main>
-      <Footer>
-        <p>&copy; 2025 Bright Sparks Academy. All rights reserved.</p>
-      </Footer>
-    </>
-  );
-}
-
-export default FrontPage;
+const CTASubtext = styled.p`
+  font-size: 1rem;
+  margin-bottom: 2rem;
+`;
