@@ -41,17 +41,17 @@ const Join = () => {
             <StepDesc>Sessions begin with regular updates to you.</StepDesc>
           </StepCard>
         </Steps>
-        <NoteText>It only takes 2 minutes to join. No payments. No commitments.</NoteText>
+        <NoteText>It only takes 5 minutes to join. No payments. No commitments.</NoteText>
       </HowItWorks>
 
       {/* Embedded Tally.so Form */}
       <FormSection id="enroll-form">
-        <SectionTitle>Enroll in Under 2 Minutes</SectionTitle>
+        <SectionTitle>Enroll in Under 5 Minutes</SectionTitle>
         <FormWrapper>
           <Iframe
-            src="https://tally.so/embed/YOUR_FORM_ID?transparentBackground=1&hideTitle=1"
+            src="https://tally.so/embed/mO4r8A?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
             width="100%"
-            height="800"
+            height="600"
             frameBorder="0"
             marginHeight="0"
             marginWidth="0"
@@ -59,7 +59,7 @@ const Join = () => {
           />
         </FormWrapper>
         <SupportText>
-          Having trouble or questions? Contact us at info@brightsparks.academy or (555) 123-4567 for support.
+          Having trouble or questions? Contact us at reach@brightsparks.academy or (650) 272-7186 for support.
         </SupportText>
       </FormSection>
 
@@ -73,8 +73,11 @@ const Join = () => {
           { q: 'What if my child’s schedule changes?', a: 'You can update your availability at any time.' },
         ].map((item, idx) => (
           <AccordionItem key={idx}>
-          <Question onClick={() => toggleFAQ(idx)}>{item.q}</Question>
-          {openFAQ === idx && <Answer>{item.a}</Answer>}
+            <Question onClick={() => toggleFAQ(idx)}>
+              {item.q}
+              <Arrow open={openFAQ === idx}>›</Arrow>
+            </Question>
+            {openFAQ === idx && <Answer>{item.a}</Answer>}
           </AccordionItem>
         ))}
       </FAQSection>
@@ -95,6 +98,7 @@ export default Join;
 const PageWrapper = styled.div`
   font-family: 'Inter', sans-serif;
   color: #000;
+  background-color: #fffbea;
 `;
 
 const HeroSection = styled.section`
@@ -219,24 +223,43 @@ const SupportText = styled.p`
   font-size: 0.875rem;
 `;
 
+// Accordion styles
 const FAQSection = styled.section`
   padding: 4rem 2rem;
-  background: #ffffff;
+  background: transparent;
+  max-width: 800px;
+  margin: 0 auto;
 `;
 
 const AccordionItem = styled.div`
   margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 `;
 
-const Question = styled.h4`
-  font-size: 1rem;
+const Question = styled.div`
+  padding: 1rem;
   font-weight: bold;
-  margin: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffbea;
 `;
 
-const Answer = styled.p`
-  font-size: 0.875rem;
-  margin: 0.5rem 0 0 0;
+const Arrow = styled.span`
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+  transform: rotate(${props => (props.open ? '90deg' : '0deg')});
+`;
+
+const Answer = styled.div`
+  padding: 1rem;
+  font-size: 1rem;
+  border-top: 1px solid #eee;
+  background: #fff;
 `;
 
 const FinalCTA = styled.section`
