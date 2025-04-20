@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import heroImage from '../images/BrightSparksLogo.png'; // replace with actual hero image path
+import heroImage from '../images/landing-hero.png'; // hero image for right side
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -14,6 +14,13 @@ const Landing = () => (
     <HeroSection>
       <Overlay />
       <HeroContent>
+        {/* Trust Badges */}
+        <TrustSection>
+          <BadgeList>
+            <BadgeItem>✅ Over 5,000 sessions completed</BadgeItem>
+            <BadgeItem>⭐ Loved by 100+ families nationwide</BadgeItem>
+          </BadgeList>
+        </TrustSection>
         <Headline>Free. Personalized. Flexible Tutoring That Transforms Futures.</Headline>
         <Subheadline>
           Bright Sparks Academy offers free 1-on-1 tutoring tailored to every child’s needs—right from the comfort of your home.
@@ -23,21 +30,23 @@ const Landing = () => (
           <SecondaryLink to="/origin">Learn More About Us</SecondaryLink>
         </ButtonGroup>
       </HeroContent>
+      <HeroImage src={heroImage} alt="Tutoring illustration" />
     </HeroSection>
 
     {/* Impact & Mission */}
     <ImpactSection>
-      {[
-        { metric: '3+ Years of Free Tutoring', caption: '' },
-        { metric: '50+ Tutors Trained', caption: '' },
-        { metric: '20+ Current Students Served', caption: '' },
-        { metric: '100% Personalized Learning Paths', caption: '' },
-      ].map((item, i) => (
-        <ImpactCard key={i} style={{ animationDelay: `${i * 0.2}s` }}>
-          <Metric>{item.metric}</Metric>
-          <Caption>{item.caption}</Caption>
-        </ImpactCard>
-      ))}
+      <StatsGrid>
+        {[
+          { metric: '3+ Years of Free Tutoring' },
+          { metric: '50+ Tutors Trained' },
+          { metric: '20+ Current Students Served' },
+          { metric: '100% Personalized Learning Paths' },
+        ].map((item, i) => (
+          <ImpactCard key={i} style={{ animationDelay: `${i * 0.2}s` }}>
+            <Metric>{item.metric}</Metric>
+          </ImpactCard>
+        ))}
+      </StatsGrid>
       <MissionStatement>
         We’re reimagining education by offering cutting-edge, customized tutoring to underserved children—free of charge, anytime, anywhere.
       </MissionStatement>
@@ -103,10 +112,10 @@ const PageWrapper = styled.div`
 
 const HeroSection = styled.section`
   position: relative;
-  // background: url(${heroImage}) center/cover no-repeat;
-  height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 3rem 0;
 `;
 
 const Overlay = styled.div`
@@ -145,8 +154,11 @@ const PrimaryButton = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   margin-right: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
   &:hover {
-    opacity: 0.8;
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(255,217,0,0.6);
   }
 `;
 
@@ -157,10 +169,16 @@ const SecondaryLink = styled(Link)`
 `;
 
 const ImpactSection = styled.section`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
   padding: 4rem 2rem;
+  background: #fff;
+  text-align: center;
+`;
+
+const StatsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const ImpactCard = styled.div`
@@ -174,9 +192,9 @@ const Metric = styled.h3`
   margin-bottom: 0.5rem;
 `;
 
-const Caption = styled.p`
-  font-size: 1rem;
-`;
+// const Caption = styled.p`
+//   font-size: 1rem;
+// `;
 
 const MissionStatement = styled.p`
   max-width: 800px;
@@ -278,4 +296,32 @@ const CTATitle = styled.h2`
 const CTASubtext = styled.p`
   font-size: 1rem;
   margin-bottom: 2rem;
+`;
+
+const HeroImage = styled.img`
+  max-width: 40%;
+  border-radius: 1rem;
+  object-fit: cover;
+  margin-right: 3%;
+  animation: ${fadeInUp} 0.8s ease-out forwards;
+`;
+
+// Trust badges
+const TrustSection = styled.div`
+  margin-top: 4rem;
+  text-align: center;
+`;
+
+const BadgeList = styled.div`
+  display: inline-flex;
+  gap: 1rem;
+  margin-left: -40px;
+`;
+
+const BadgeItem = styled.div`
+  background: #fff;
+  border: 1px solid #ffd900;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
 `;

@@ -25,8 +25,8 @@ const Connect = () => (
           A safe, smart, and beautifully simple video platform built just for our students, tutors, and families.
         </Subtitle>
         <HeroButtons>
-          <PrimaryButton href="#features">See the Platform</PrimaryButton>
-          <SecondaryButton href="https://app.brightsparks.connect" target="_blank">
+          <PrimaryButton href="https://www.connect.brightsparks.academy" target="_blank">See the Platform</PrimaryButton>
+          <SecondaryButton href="/join">
             Join a Session
           </SecondaryButton>
         </HeroButtons>

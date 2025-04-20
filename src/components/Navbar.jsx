@@ -44,6 +44,7 @@ const Navbar = () => {
 
         <Logo to="/">
           <img src={logo} alt="Bright Sparks Academy" />
+          <LogoText>Bright Sparks Academy</LogoText>
         </Logo>
 
         <NavLinks isOpen={isOpen}>
@@ -75,30 +76,40 @@ export default Navbar;
 
 const Nav = styled.nav`
   position: sticky;
-  top: 0;
+  top: 20px;
+  margin: 0 auto;
+  max-width: 1300px;
   width: 100%;
   background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
   z-index: 1000;
   box-shadow: ${({ scrolled }) =>
     scrolled ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'};
-  transition: box-shadow 0.3s ease;
+  transform-origin: top center;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const NavContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  height: 60px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 10px;
 `;
 
 const Logo = styled(Link)`
   display: flex;
   align-items: center;
+  text-decoration: none;
   img {
-    height: 40px;
+    height: 60px;
     transition: transform 0.3s ease;
   }
   &:hover img {
@@ -218,4 +229,13 @@ const Backdrop = styled.div`
     background: rgba(0,0,0,0.3);
     z-index: 998;
   }
+`;
+
+const LogoText = styled.span`
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000;
+  margin-left: 8px;
+  text-decoration: none;
 `;

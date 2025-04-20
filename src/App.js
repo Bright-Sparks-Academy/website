@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 import Landing from './views/Landing.jsx'
 import Programs from './views/Programs.jsx'
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/join" element={<Join />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </Router>
   );
 };
